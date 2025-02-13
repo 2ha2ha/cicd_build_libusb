@@ -51,10 +51,7 @@ RET qget(QINFO* info) {
         goto ST_DEBUG;
     }
     const struct stlink_chipid_params* params = NULL;
-    params = stlink_chipid_get_params(sl->chip_id);
-    if(params == NULL) {
-        params = stlink_chipid_get_params_hard(sl->chip_id);
-    }
+    params = stlink_chipid_get_params_hard(sl->chip_id);
     info->id = sl->chip_id;
     info->sflash = sl->flash_size;
     info->ssram = sl->sram_size;

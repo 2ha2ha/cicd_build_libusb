@@ -37,7 +37,8 @@ void stlink_print_devicelist() {
     fprintf(file, "0x%x," ,  dev->option_size);
     fprintf(file, "%d,"   ,  dev->flags);
     fprintf(file, "0x%x," ,  dev->otp_base);
-    fprintf(file, "0x%x"  ,  dev->otp_size);
+    fprintf(file, "0x%x," ,  dev->otp_size);
+    fprintf(file, "NULL");
     fprintf(file, "},");
     fprintf(file, "\n");
   }
