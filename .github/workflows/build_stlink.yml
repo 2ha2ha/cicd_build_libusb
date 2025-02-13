@@ -38,3 +38,5 @@ jobs:
           name: stlink-static
           path: |
             stlink\build\dist
+            stlink\src\stlink-lib\chipid.c
+            stlink\src\stlink-lib\chipid.h
