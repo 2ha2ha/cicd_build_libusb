@@ -16,14 +16,16 @@ jobs:
         working-directory: stlink
         shell: pwsh
         run: |
+          # 替换 "CMAKE_CHIPS_DIR" > ""./chips"
           (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
           type CMakeLists.txt
 
+      - name: 创建 build 目录
+        run: mkdir ./build
+
       - name: 编译项目
-        working-directory: stlink
-        run: |
-          mkdir ./build
-          cd build
+        working-directory: stlink/build
+        run: >
           cmake ..
           -G "Visual Studio 17 2022" -A Win32
           -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
