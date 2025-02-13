@@ -12,11 +12,13 @@ target_include_directories(QLinkLib PUBLIC
 )
 
 # 指定库文件目录并链接
+message(STATUS "Library path: ${CMAKE_SOURCE_DIR}/stlink/lib")
 link_directories(${CMAKE_SOURCE_DIR}/stlink/lib)
 target_link_libraries(QLinkLib PRIVATE 
     stlink-static
     libusb-1.0  # 添加其他必要依赖
 )
+
 
 set_target_properties(QLinkLib PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/dll"
