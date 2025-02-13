@@ -1,4 +1,4 @@
-name: build_stlink
+name: 打包上传 stlink
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   job_windows_msvc:
-    name: windows MSVC
+    name: 打包上传 stlink
     runs-on: windows-latest
     steps:
       - name: 克隆项目 stlink
