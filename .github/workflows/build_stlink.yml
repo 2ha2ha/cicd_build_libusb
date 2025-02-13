@@ -25,7 +25,6 @@ jobs:
 
           # 解压到当前目录
           Expand-Archive -Path "stlink-*.zip" -DestinationPath .
-          tree
           Get-ChildItem -Directory stlink-1* | Rename-Item -NewName "stlink-new" -Force
           cd stlink-new
 
@@ -33,7 +32,8 @@ jobs:
           $src = "Program Files (x86)\stlink\config\chips"
           $dest = "bin\chips"
           Move-Item -Path $src -Destination $dest -Force
-          Remove-Item -Path $src -Recurse -Force
+          Remove-Item -Path $dest -Recurse -Force
+          tree
 
       # - name: Modify CMakeLists.txt
       #   working-directory: stlink
