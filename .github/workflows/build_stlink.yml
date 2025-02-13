@@ -15,15 +15,13 @@ jobs:
         working-directory: stlink
         run: mkdir ./build
 
-      - name: add code
-        working-directory: stlink/src/stlink-lib
+      - name: Modify CMakeLists.txt
+        shell: pwsh
         run: |
-          @"
+          (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
 
-          void set_devicelist(struct stlink_chipid_params *set) {
-              devicelist=set;
-          }
-          "@ >> "chipid.c"
+      - name: Verify changes
+        run: type CMakeLists.txt
 
       - name: project configuration in release
         working-directory: stlink/build
@@ -33,7 +31,6 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
           -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
           -DCMAKE_BUILD_TYPE=Release
-          -DSTLINK_CHIPS_DIR="./chips"
 
       - name: project PACKAGE
         working-directory: stlink/build
