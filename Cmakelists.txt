@@ -18,7 +18,7 @@ target_include_directories(QLinkLib PUBLIC
 )
 
 # 链接 stlink-static.lib 库
-target_link_libraries(QLinkLib PRIVATE ${CMAKE_SOURCE_DIR}/stlink/lib/stlink-static.lib)
+target_link_libraries(QLinkLib PRIVATE ${CMAKE_SOURCE_DIR}/stlink/lib/stlink-static)
 
 # 设置输出目录（可选）
 set_target_properties(QLinkLib PROPERTIES
