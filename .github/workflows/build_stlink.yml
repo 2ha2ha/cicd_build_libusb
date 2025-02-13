@@ -1,6 +1,7 @@
 name: build_stlink
 
 on:
+  push:
   workflow_dispatch: 
 
 jobs:
@@ -8,45 +9,23 @@ jobs:
     name: windows MSVC
     runs-on: windows-latest
     steps:
-      - name: Clone stlink
-        run: git clone https://github.com/stlink-org/stlink.git
+      # - name: Clone stlink
+      #   run: git clone https://github.com/stlink-org/stlink.git
 
-      - name: environment preparation
-        working-directory: stlink
-        run: mkdir ./build
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Modify CMakeLists.txt
-        working-directory: stlink
-        shell: pwsh
-        run: |
-          (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
-
-      - name: Verify changes
-        run: type stlink/CMakeLists.txt
-
-      - name: project configuration in release
-        working-directory: stlink/build
-        run: >
-          cmake ..
-          -G "Visual Studio 17 2022" -A Win32
-          -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
-          -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
-          -DCMAKE_BUILD_TYPE=Release
-
-      - name: project PACKAGE
-        working-directory: stlink/build
-        run: cmake --build . --config Release --target PACKAGE
-
-      - name: List directory structure
-        run: tree /F stlink/build
+      # - name: environment preparation
+      #   working-directory: stlink
+      #   run: mkdir ./build
 
       - name: Process stlink
-        working-directory: stlink/build/dist
         shell: pwsh
         run: |
 
           # 解压到当前目录
           Expand-Archive -Path "stlink-*.zip" -DestinationPath .
+          tree
           Rename-Item -Path "stlink-*" -NewName $newName "stlink-new" -Force
           cd stlink-new
 
@@ -55,6 +34,33 @@ jobs:
           $dest = "bin\chips"
           Move-Item -Path $src -Destination $dest -Force
           Remove-Item -Path $src -Recurse -Force
+
+      # - name: Modify CMakeLists.txt
+      #   working-directory: stlink
+      #   shell: pwsh
+      #   run: |
+      #     (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
+
+      # - name: Verify changes
+      #   run: type stlink/CMakeLists.txt
+
+      # - name: project configuration in release
+      #   working-directory: stlink/build
+      #   run: >
+      #     cmake ..
+      #     -G "Visual Studio 17 2022" -A Win32
+      #     -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
+      #     -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
+      #     -DCMAKE_BUILD_TYPE=Release
+
+      # - name: project PACKAGE
+      #   working-directory: stlink/build
+      #   run: cmake --build . --config Release --target PACKAGE
+
+      # - name: List directory structure
+      #   run: tree /F stlink/build
+
+
 
       - name: Upload stlink-static
         uses: actions/upload-artifact@v4
