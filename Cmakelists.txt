@@ -16,14 +16,14 @@ add_library(QLinkLib SHARED
 
 # 指定头文件路径
 target_include_directories(QLinkLib PUBLIC
-    stlink/include
-    stlink/include/libusb-1.0
+    stlink-static/include
+    stlink-static/include/libusb-1.0
 )
 
 # 链接 stlink-static.lib 库
 target_link_libraries(QLinkLib PRIVATE 
-    ${CMAKE_SOURCE_DIR}/stlink/lib/stlink-static.lib
-    ${CMAKE_SOURCE_DIR}/stlink/lib/libusb-1.0.lib
+    ${CMAKE_SOURCE_DIR}/stlink-static/lib/stlink-static.lib
+    ${CMAKE_SOURCE_DIR}/stlink-static/lib/libusb-1.0.lib
 )
 
 # 设置输出目录（可选）
@@ -31,25 +31,3 @@ set_target_properties(QLinkLib PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/dll"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/dll"
 )
-
-# 说明：
-
-#     cmake_minimum_required：指定 CMake 的最低版本要求。
-#     project：定义项目名称为 QLinkLib。
-#     add_library：创建一个动态链接库（SHARED），并指定源文件 src/QLinkLib.c 和 src/b.c。
-#     target_include_directories：添加头文件路径 stlink/include 和 inc/。
-#     target_link_libraries：链接静态库 stlink/lib/stlink-static.lib。
-#     set_target_properties：设置生成的 DLL 文件的输出目录（可选）。
-
-# 使用方法：
-
-#     将上述内容保存为 CMakeLists.txt 文件。
-#     创建一个构建目录并运行 CMake：
-#     bash复制
-
-#     mkdir build
-#     cd build
-#     cmake ..
-#     cmake --build . --config Release
-
-#     生成的 DLL 文件将位于 build/dll 目录下。

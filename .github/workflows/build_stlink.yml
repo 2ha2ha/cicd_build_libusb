@@ -1,7 +1,6 @@
 name: build_stlink
 
 on:
-  push:
   workflow_dispatch: 
 
 jobs:
@@ -39,4 +38,3 @@ jobs:
           path: |
             stlink\build\dist
             stlink\src\stlink-lib\chipid.c
-            stlink\src\stlink-lib\chipid.h
