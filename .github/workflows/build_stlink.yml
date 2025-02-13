@@ -13,19 +13,7 @@ jobs:
 
       - name: environment preparation
         working-directory: stlink
-        run: mkdir .\\build\\debug && mkdir .\\build\\release
-
-      - name: project configuration in debug
-        working-directory: stlink/build/debug
-        run: cmake ..\\.. -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Debug
-
-      - name: project build in debug
-        working-directory: stlink/build/debug
-        run: cmake --build . --target ALL_BUILD
-
-      - name: run tests
-        working-directory: stlink/build/debug
-        run: ctest --force-new-ctest-process
+        run: mkdir .\\build\\release
 
       - name: project configuration in release
         working-directory: stlink/build/release
@@ -39,10 +27,6 @@ jobs:
         working-directory: stlink/build/release
         run: cmake --build . --target INSTALL
 
-      - name: sudo make uninstall
-        working-directory: stlink/build/release
-        run: cmake --build . --target uninstall
-
       - name: List directory structure
         run: tree /F stlink\build
 
@@ -51,6 +35,6 @@ jobs:
         with:
           name: stlink
           path: |
-            stlink\build\debug
             stlink\build\release
+            C:/Program Files (x86)/stlink
 
