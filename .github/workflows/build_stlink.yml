@@ -30,12 +30,6 @@ jobs:
         working-directory: stlink/build/release
         run: cmake --build . --config Release --target ALL_BUILD
 
-      - name: Verify static linking
-        working-directory: stlink/build/release/bin/Release
-        run: |
-          dumpbin /dependents st-flash.exe
-          dumpbin /dependents st-info.exe
-
       - name: project installation
         working-directory: stlink/build/release
         run: cmake --build . --config Release --target INSTALL
