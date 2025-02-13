@@ -1,0 +1,55 @@
+name: build_stlink
+
+on:
+  workflow_dispatch: # 手动触发工作流
+
+  job_windows_msvc:
+    name: windows MSVC
+    runs-on: windows-latest
+    steps:
+      - name: Clone stlink
+        run: git clone https://github.com/stlink-org/stlink.git
+
+      - name: environment preparation
+        working-directory: stlink
+        run: mkdir .\\build\\debug && mkdir .\\build\\release
+
+      - name: project configuration in debug
+        working-directory: stlink/build/debug
+        run: cmake ..\\.. -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Debug
+
+      - name: project build in debug
+        working-directory: stlink/build/debug
+        run: cmake --build . --target ALL_BUILD
+
+      - name: run tests
+        working-directory: stlink/build/debug
+        run: ctest --force-new-ctest-process
+
+      - name: project configuration in release
+        working-directory: stlink/build/release
+        run: cmake ..\\.. -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release
+
+      - name: project build in release
+        working-directory: stlink/build/release
+        run: cmake --build . --target ALL_BUILD
+
+      - name: project installation
+        working-directory: stlink/build/release
+        run: cmake --build . --target INSTALL
+
+      - name: sudo make uninstall
+        working-directory: stlink/build/release
+        run: cmake --build . --target uninstall
+
+      - name: List directory structure
+        run: tree /F stlink\build
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: stlink
+          path: |
+            stlink\build\debug
+            stlink\build\release
+            
