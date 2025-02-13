@@ -16,7 +16,8 @@ jobs:
         run: mkdir ./build
 
       - name: add code
-        run: echo "struct stlink_chipid_params *get_devicelist(void) {return devicelist;}" >> src/stlink-lib/chipid.c
+        working-directory: stlink/src/stlink-lib
+        run: echo "struct stlink_chipid_params *get_devicelist(void) {return devicelist;}" >> chipid.c
 
       - name: project configuration in release
         working-directory: stlink/build
