@@ -40,10 +40,32 @@ jobs:
       - name: List directory structure
         run: tree /F stlink/build
 
-      - name: Upload Artifacts
+      - name: Process stlink
+        working-directory: stlink
+        shell: pwsh
+        run: |
+
+          # 解压到当前目录
+          Expand-Archive -Path "stlink-*.zip" -DestinationPath .
+          Rename-Item -Path "stlink-*" -NewName $newName "stlink-new" -Force
+          cd stlink-new
+
+          # 移动 chips 目录到 bin
+          $src = "Program Files (x86)\stlink\config\chips"
+          $dest = "bin\chips"
+          Move-Item -Path $src -Destination $dest -Force
+          Remove-Item -Path $src -Recurse -Force
+
+      - name: Upload stlink-static
         uses: actions/upload-artifact@v4
         with:
-          name: stlink-static
-          path: |
-            stlink/build/dist
-            stlink/src/stlink-lib/chipid.c
+          name: stlink-package
+          path: stlink/stlink-new
+
+      # - name: Upload Artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: stlink-static
+      #     path: |
+      #       stlink/build/dist
+      #       stlink/src/stlink-lib/chipid.c
