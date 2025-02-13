@@ -36,5 +36,5 @@ jobs:
           name: stlink
           path: |
             stlink\build\release
-            C:/Program Files (x86)/stlink
+            stlink\config\ships
 
