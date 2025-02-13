@@ -13,10 +13,10 @@ jobs:
 
       - name: environment preparation
         working-directory: stlink
-        run: mkdir .\build
+        run: mkdir ./build
 
-      - name: 代码注入
-        run: echo struct stlink_chipid_params ^*get_devicelist(void^) {return devicelist;} >> "stlink\src\stlink-lib\chipid.c"
+      - name: add code
+        run: echo "struct stlink_chipid_params *get_devicelist(void) {return devicelist;}" >> src/stlink-lib/chipid.c
 
       - name: project configuration in release
         working-directory: stlink/build
@@ -32,12 +32,12 @@ jobs:
         run: cmake --build . --config Release --target PACKAGE
 
       - name: List directory structure
-        run: tree /F stlink\build
+        run: tree /F stlink/build
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: stlink-static
           path: |
-            stlink\build\dist
-            stlink\src\stlink-lib\chipid.c
+            stlink/build/dist
+            stlink/src/stlink-lib/chipid.c
