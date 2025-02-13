@@ -9,30 +9,32 @@ jobs:
     name: windows MSVC
     runs-on: windows-latest
     steps:
-      - name: Clone stlink
+      - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
 
       - name: environment preparation
         working-directory: stlink
-        run: mkdir ./build
+        run: 
 
-      - name: Modify CMakeLists.txt
+      - name: 修改 CMakeLists.txt
         working-directory: stlink
         shell: pwsh
         run: |
           (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
           type CMakeLists.txt
 
-      - name: project configuration in release
-        working-directory: stlink/build
+      - name: 编译项目
+        working-directory: stlink
         run: >
+          mkdir ./build
+          cd build
           cmake ..
           -G "Visual Studio 17 2022" -A Win32
           -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
           -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
           -DCMAKE_BUILD_TYPE=Release
 
-      - name: project PACKAGE
+      - name: 打包项目
         working-directory: stlink/build
         run: cmake --build . --config Release --target PACKAGE
 
@@ -41,26 +43,16 @@ jobs:
         shell: pwsh
         working-directory: stlink/build/dist
         run: |
-          # 解压到当前目录
+          tree
           Expand-Archive -Path "stlink-*.zip" -DestinationPath .
           Get-ChildItem -Directory "stlink-*" | Rename-Item -NewName "stlink-new" -Force
           cd stlink-new
-
-          # 移动 chips 目录到 bin
           Move-Item -Path "Program Files (x86)\stlink\config\chips" -Destination "bin\chips" -Force
           Remove-Item -Path "Program Files (x86)" -Recurse -Force
           tree
 
-      - name: Upload stlink-static
+      - name: 上传 stlink
         uses: actions/upload-artifact@v4
         with:
           name: stlink-package
           path: stlink/build/dist/stlink-new
-
-      # - name: Upload Artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: stlink-static
-      #     path: |
-      #       stlink/build/dist
-      #       stlink/src/stlink-lib/chipid.c
