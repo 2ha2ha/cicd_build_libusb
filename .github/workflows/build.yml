@@ -19,9 +19,13 @@ jobs:
         msbuild /p:Configuration=Release-MT /p:Platform=Win32 libusb/msvc/libusb_static.vcxproj
         msbuild /p:Configuration=Release-MT /p:Platform=Win32 libusb/msvc/libusb_dll.vcxproj
 
+    - name: List directory structure
+      run: tree /F libusb\build
+
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: libusb
         path: |
-          libusb\build\v143\Win32\Release-MT\
+          libusb\build\v143\Win32\Release-MT\dll
+          libusb\build\v143\Win32\Release-MT\lib
