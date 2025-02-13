@@ -191,7 +191,7 @@ RET qwrite(const char *path, uint32_t addr) {
     }
     if ((addr >= sl->flash_base) && (addr < sl->flash_base + sl->flash_size)) {
         if (isHex) {
-            if (stlink_mwrite_flash(sl, mem, size, addr)) {
+            if (stlink_mwrite_flash(sl, mem, size, addr, NO_ERASE)) {
                 ret = RET_MWRITE_FLASH;
             }
         }
