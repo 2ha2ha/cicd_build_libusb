@@ -22,7 +22,7 @@ jobs:
           (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
 
       - name: Verify changes
-        run: type CMakeLists.txt
+        run: type stlink/CMakeLists.txt
 
       - name: project configuration in release
         working-directory: stlink/build
