@@ -26,15 +26,15 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
           -DSTLINK_USE_SYSTEM_LIBUSB=FALSE
 
-      - name: project build in release
-        working-directory: stlink/build/release
-        run: cmake --build . --config Release --target ALL_BUILD
+      # - name: project build in release
+      #   working-directory: stlink/build/release
+      #   run: cmake --build . --config Release --target ALL_BUILD
 
-      - name: project installation
-        working-directory: stlink/build/release
-        run: cmake --build . --config Release --target INSTALL
+      # - name: project installation
+      #   working-directory: stlink/build/release
+      #   run: cmake --build . --config Release --target INSTALL
 
-      - name: project installation
+      - name: project PACKAGE
         working-directory: stlink/build/release
         run: cmake --build . --config Release --target PACKAGE
 
@@ -46,5 +46,4 @@ jobs:
         with:
           name: stlink-static
           path: |
-            stlink\build\release
-            stlink\config\chips
+            stlink\build\release\dist
