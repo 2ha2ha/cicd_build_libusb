@@ -13,7 +13,7 @@
 
 extern struct stlink_chipid_params dev_const[];
 struct stlink_chipid_params *stlink_chipid_get_params_hard(uint32_t chip_id) {
-    for(uint32_t i=0; i<sizeof(dev_const)/sizeof(dev_const[0]); i++) {
+    for(uint32_t i=0; i<70; i++) {
         if(dev_const[i].chip_id == chip_id) {
             return &dev_const[i];
         }
