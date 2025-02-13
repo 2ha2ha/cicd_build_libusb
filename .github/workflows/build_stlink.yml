@@ -26,7 +26,7 @@ jobs:
           # 解压到当前目录
           Expand-Archive -Path "stlink-*.zip" -DestinationPath .
           tree
-          Rename-Item -Path "stlink-*" -NewName $newName "stlink-new" -Force
+          Rename-Item -Path "stlink-1*" -NewName "stlink-new" -Force
           cd stlink-new
 
           # 移动 chips 目录到 bin
