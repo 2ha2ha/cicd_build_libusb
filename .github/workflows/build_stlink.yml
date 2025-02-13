@@ -17,7 +17,7 @@ jobs:
 
       - name: project configuration in release
         working-directory: stlink/build/release
-        run: cmake ..\\.. -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release
+        run: cmake ..\\.. -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -A Win32
 
       - name: project build in release
         working-directory: stlink/build/release
@@ -36,5 +36,5 @@ jobs:
           name: stlink
           path: |
             stlink\build\release
-            stlink\config\ships
+            stlink\config\chips
 
