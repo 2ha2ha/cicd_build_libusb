@@ -21,7 +21,7 @@ jobs:
 
       - name: 编译项目
         working-directory: stlink
-        run: >
+        run: |
           mkdir ./build
           cd build
           cmake ..
