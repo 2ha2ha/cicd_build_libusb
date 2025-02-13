@@ -196,7 +196,7 @@ RET qwrite(const char *path, uint32_t addr) {
             }
         }
         else {
-            if (stlink_fwrite_flash(sl, path, addr)) {
+            if (stlink_fwrite_flash(sl, path, addr, NO_ERASE)) {
                 ret = RET_FWRITE_FLASH;
             }
         }

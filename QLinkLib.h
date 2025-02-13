@@ -32,7 +32,6 @@ typedef struct {
 } QINFO;
 
 QLINKLIBAPI RET qget(QINFO* info);
-QLINKLIBAPI RET qinit();
 QLINKLIBAPI RET qwrite(const char* path, uint32_t addr);
 QLINKLIBAPI RET qwrites(const char* path, const char* addr);
 QLINKLIBAPI RET qread(uint32_t addr, uint32_t len, uint8_t *data);
