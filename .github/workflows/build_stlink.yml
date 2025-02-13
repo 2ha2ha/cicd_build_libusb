@@ -3,6 +3,7 @@ name: build_stlink
 on:
   workflow_dispatch: # 手动触发工作流
 
+jobs:
   job_windows_msvc:
     name: windows MSVC
     runs-on: windows-latest
@@ -52,4 +53,4 @@ on:
           path: |
             stlink\build\debug
             stlink\build\release
-            
+
