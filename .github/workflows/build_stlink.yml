@@ -16,6 +16,7 @@ jobs:
         run: mkdir ./build
 
       - name: Modify CMakeLists.txt
+        working-directory: stlink
         shell: pwsh
         run: |
           (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
