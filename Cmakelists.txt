@@ -9,7 +9,10 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # 添加动态链接库目标
-add_library(QLinkLib SHARED QLinkLib.c)
+add_library(QLinkLib SHARED 
+    QLinkLib.c
+    chipid_hard.c
+)
 
 # 指定头文件路径
 target_include_directories(QLinkLib PUBLIC
