@@ -12,10 +12,6 @@ jobs:
       - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
 
-      - name: environment preparation
-        working-directory: stlink
-        run: 
-
       - name: 修改 CMakeLists.txt
         working-directory: stlink
         shell: pwsh
