@@ -1,0 +1,31 @@
+name: Manual Build Workflow
+
+on:
+  workflow_dispatch: # 允许手动触发工作流
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive   
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Clone stlink
+      run: git clone https://github.com/libusb/libusb.git
+
+    - name: Build libusb_static 
+      run: |
+        msbuild /p:Configuration=Release-MT /p:Platform=Win32 libusb/msvc/libusb_static.vcxproj
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: QLink_dll
+        path: |
+          libusb\build\v143\Win32\Release-MT\
