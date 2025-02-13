@@ -11,6 +11,15 @@
 
 #define MEM_READ_SIZE 1024
 
+struct stlink_chipid_params *stlink_chipid_get_params_hard(uint32_t chip_id) {
+    for(uint32_t i=0; i<sizeof(dev_const)/sizeof(dev_const[0]); i++) {
+        if(dev_const[i].chip_id == chip_id) {
+            return &dev_const[i];
+        }
+    }
+    return &dev_const[0];
+}
+
 // 自动加载设备列表
 static void qinit() {
     static int init = 0;
@@ -42,6 +51,9 @@ RET qget(QINFO* info) {
     }
     const struct stlink_chipid_params* params = NULL;
     params = stlink_chipid_get_params(sl->chip_id);
+    if(params == NULL) {
+        params = stlink_chipid_get_params_hard(sl->chip_id);
+    }
     info->id = sl->chip_id;
     info->sflash = sl->flash_size;
     info->ssram = sl->sram_size;
