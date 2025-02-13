@@ -42,6 +42,5 @@ jobs:
         with:
           name: stlink-static
           path: |
-            stlink\build\release\bin\Release\*.exe
-            stlink\build\release\lib\Release\*.lib
+            stlink\build\release
             stlink\config\chips
