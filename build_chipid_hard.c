@@ -1,4 +1,37 @@
 #include "stlink-static/chipid.c"
+
+void stlink_add_devicelist(struct stlink_chipid_params arr[]) {
+  int i = 0;
+  for(i=0; arr[i].dev_type != NULL; i++) {
+    struct stlink_chipid_params *ts;
+    ts = calloc(1, sizeof(struct stlink_chipid_params));
+    if (ts==NULL) {
+        continue;
+    }
+    ts->dev_type = arr[i].dev_type;
+    ts->ref_manual_id = arr[i].ref_manual_id;
+    ts->chip_id = arr[i].chip_id;
+    ts->flash_type = arr[i].flash_type;
+    ts->flash_size_reg = arr[i].flash_size_reg;
+    ts->flash_pagesize = arr[i].flash_pagesize;
+    ts->sram_size = arr[i].sram_size;
+    ts->bootrom_base = arr[i].bootrom_base;
+    ts->bootrom_size = arr[i].bootrom_size;
+    ts->option_base = arr[i].option_base;
+    ts->option_size = arr[i].option_size;
+    ts->flags = arr[i].flags;
+    ts->otp_base = arr[i].otp_base;
+    ts->otp_size = arr[i].otp_size;
+    ts->next = devicelist;
+    devicelist = ts;
+  }
+}
+
+void stlink_auto_devicelist() {
+    stlink_add_devicelist(devicelist_const);
+}
+
+
 int32_t ugly_log(int32_t level, const char *tag, const char *format, ...) {
   va_list args;
   va_start(args, format);

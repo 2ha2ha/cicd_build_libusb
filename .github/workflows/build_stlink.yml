@@ -19,9 +19,9 @@ jobs:
         working-directory: stlink/src/stlink-lib
         run: |
           @"
-          
-          struct stlink_chipid_params *get_devicelist(void) {
-              return devicelist;
+
+          void set_devicelist(struct stlink_chipid_params *set) {
+              devicelist=set;
           }
           "@ >> "chipid.c"
 
