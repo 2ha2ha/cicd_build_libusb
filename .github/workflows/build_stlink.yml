@@ -1,6 +1,7 @@
 name: build_stlink
 
 on:
+  push:
   workflow_dispatch: 
 
 jobs:
