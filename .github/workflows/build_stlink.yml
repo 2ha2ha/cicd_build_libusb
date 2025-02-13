@@ -13,10 +13,10 @@ jobs:
 
       - name: environment preparation
         working-directory: stlink
-        run: mkdir .\build\release
+        run: mkdir .\build
 
       - name: project configuration in release
-        working-directory: stlink/build/release
+        working-directory: stlink/build
         run: >
           cmake ../../ 
           -G "Visual Studio 17 2022" -A Win32
@@ -26,16 +26,8 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
           -DSTLINK_USE_SYSTEM_LIBUSB=FALSE
 
-      # - name: project build in release
-      #   working-directory: stlink/build/release
-      #   run: cmake --build . --config Release --target ALL_BUILD
-
-      # - name: project installation
-      #   working-directory: stlink/build/release
-      #   run: cmake --build . --config Release --target INSTALL
-
       - name: project PACKAGE
-        working-directory: stlink/build/release
+        working-directory: stlink/build
         run: cmake --build . --config Release --target PACKAGE
 
       - name: List directory structure
@@ -46,4 +38,4 @@ jobs:
         with:
           name: stlink-static
           path: |
-            stlink\build\release\dist
+            stlink\build\dist\*.zip
