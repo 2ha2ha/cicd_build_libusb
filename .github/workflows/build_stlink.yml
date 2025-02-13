@@ -29,10 +29,8 @@ jobs:
           cd stlink-new
 
           # 移动 chips 目录到 bin
-          $src = "Program Files (x86)\stlink\config\chips"
-          $dest = "bin\chips"
-          Move-Item -Path $src -Destination $dest -Force
-          Remove-Item -Path $dest -Recurse -Force
+          Move-Item -Path "Program Files (x86)\stlink\config\chips" -Destination "bin\chips" -Force
+          Remove-Item -Path "Program Files (x86)" -Recurse -Force
           tree
 
       # - name: Modify CMakeLists.txt
