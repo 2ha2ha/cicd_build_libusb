@@ -34,6 +34,10 @@ jobs:
         working-directory: stlink/build/release
         run: cmake --build . --config Release --target INSTALL
 
+      - name: project installation
+        working-directory: stlink/build/release
+        run: cmake --build . --config Release --target PACKAGE
+
       - name: List directory structure
         run: tree /F stlink\build
 
