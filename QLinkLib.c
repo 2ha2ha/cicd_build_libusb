@@ -12,17 +12,13 @@
 #define MEM_READ_SIZE 1024
 
 // 自动加载设备列表
-static void qinit(const char* path) {
+static void qinit() {
     static int init = 0;
     if (init) {
         return;
     }
     init = 1;
-    if(path==NULL || path[0]==0) {
-        init_chipids("./chips");
-    } else {
-        init_chipids(path);
-    }
+    init_chipids("./chips");
 }
 
 RET qget(QINFO* info) {
