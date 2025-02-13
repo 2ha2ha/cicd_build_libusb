@@ -21,7 +21,7 @@ jobs:
         shell: pwsh
         run: |
           (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
-          type stlink/CMakeLists.txt
+          type CMakeLists.txt
 
       - name: project configuration in release
         working-directory: stlink/build
