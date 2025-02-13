@@ -33,6 +33,7 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
           -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
           -DCMAKE_BUILD_TYPE=Release
+          -DSTLINK_CHIPS_DIR="./chips"
 
       - name: project PACKAGE
         working-directory: stlink/build
