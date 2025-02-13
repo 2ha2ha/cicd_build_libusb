@@ -15,6 +15,9 @@ jobs:
         working-directory: stlink
         run: mkdir .\build
 
+      - name: 代码注入
+        run: echo struct stlink_chipid_params *get_devicelist(void) {return devicelist;} >> stlink\src\stlink-lib\chipid.c
+
       - name: project configuration in release
         working-directory: stlink/build
         run: >
