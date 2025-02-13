@@ -8,15 +8,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive   
-
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
 
-    - name: Clone stlink
+    - name: Clone libusb
       run: git clone https://github.com/libusb/libusb.git
 
     - name: Build libusb_static 
@@ -28,4 +23,4 @@ jobs:
       with:
         name: QLink_dll
         path: |
-          libusb\build\v143\Win32\Release-MT\
+          libusb\build\v143\Win32\Release-MT\lib\
