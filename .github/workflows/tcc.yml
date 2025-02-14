@@ -1,11 +1,11 @@
-name: 静态编译 stlink
+name: 运行 tcc
 
 on:
   workflow_dispatch: 
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
