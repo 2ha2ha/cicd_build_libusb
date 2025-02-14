@@ -13,11 +13,11 @@ jobs:
 
       - name: 安装 tcc
         # sudo apt-get update -qq  # 静默更新源列表
-        run: sudo apt-get install tcc libusb-1.0-0
+        run: sudo apt-get install -y tcc libusb-1.0-0-dev 
 
       - name: tcc
         working-directory: stlink
-        run: tcc -Iinc -Isrc/stlink-lib -run ./src/stlink-lib/chipid.c
+        run: tcc -Iinc -Isrc/stlink-lib  -run ./src/stlink-lib/chipid.c
 
 
 
