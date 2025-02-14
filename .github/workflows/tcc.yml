@@ -10,9 +10,14 @@ jobs:
       - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
 
+      - name: 安装 tcc
+        run: |
+          sudo apt-get update -qq  # 静默更新源列表
+          sudo apt-get install tcc
+
       - name: tcc
         working-directory: stlink/src/stlink-lib
-        run: tcc
+        run: tcc -run chipid.c
 
 
 
