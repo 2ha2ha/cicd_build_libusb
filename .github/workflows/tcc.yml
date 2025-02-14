@@ -28,6 +28,10 @@ jobs:
           #endif // VERSION_H
           EOF
 
+          cat << EOF > inc/libusb.h
+
+          EOF
+
           cat << EOF > src/stlink-lib/main.c
           #define STLINK_HAVE_DIRENT_H
           #include "chipid.c"
@@ -64,7 +68,7 @@ jobs:
 
       - name: tcc
         working-directory: stlink
-        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/main.c
+        run: tcc -Iinc -Isrc/stlink-lib -run ./src/stlink-lib/main.c
 
 
 
