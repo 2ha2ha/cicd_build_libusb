@@ -1,7 +1,6 @@
 name: 运行 tcc
 
 on:
-  push:
   workflow_dispatch: 
 
 jobs:
@@ -20,7 +19,7 @@ jobs:
         working-directory: stlink
         run: |
 
-          cat << EOF >> inc/version.h
+          cat << EOF > inc/version.h
           #ifndef VERSION_H
           #define VERSION_H
           #define STLINK_VERSION "xxxxxx"
