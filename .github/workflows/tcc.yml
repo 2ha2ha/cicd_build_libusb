@@ -13,7 +13,7 @@ jobs:
 
       - name: 安装 tcc
         # sudo apt-get update -qq  # 静默更新源列表
-        run: sudo apt-get install tcc
+        run: sudo apt-get install tcc libusb
 
       - name: tcc
         working-directory: stlink
