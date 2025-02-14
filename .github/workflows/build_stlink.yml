@@ -36,11 +36,12 @@ jobs:
           -G "Visual Studio 17 2022" -A Win32
           -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
           -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
+          -DCMAKE_BUILD_TYPE=Release
 
       - name: 打包项目
         working-directory: stlink/build
         run: |
-          cmake --build . --config Release --target PACKAGE
+          cmake --build . --target PACKAGE
           tree
 
       - name: 调整目录结构

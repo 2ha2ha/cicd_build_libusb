@@ -277,3 +277,7 @@ void init_chipids(char *dir_to_scan) {
 }
 
 #endif // defined(_WIN32) && !defined(STLINK_HAVE_DIRENT_H)
+// 生成 stlink.lib
+// 
+
+
