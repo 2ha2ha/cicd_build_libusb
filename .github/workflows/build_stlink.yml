@@ -39,7 +39,9 @@ jobs:
 
       - name: 打包项目
         working-directory: stlink/build
-        run: cmake --build . --config Release --target PACKAGE
+        run: |
+          cmake --build . --config Release --target PACKAGE
+          tree
 
       - name: 调整目录结构
         working-directory: stlink/build/dist
