@@ -11,17 +11,23 @@ jobs:
       - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
 
-      - name: cmake
-        working-directory: stlink
-        run: cmake .
-
       - name: 安装 tcc
         # sudo apt-get update -qq  # 静默更新源列表
-        run: sudo apt-get install -y tcc libusb-1.0-0-dev 
+        run: sudo apt-get install -y tcc libusb-1.0-0-dev
+
+      - name: 创建头文件
+        working-directory: stlink
+        run: |
+          "" > inc/version.h
 
       - name: tcc
         working-directory: stlink
-        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/chipid.c
+        run: ^
+          tcc 
+          -Iinc 
+          -Isrc/stlink-lib 
+          -I/usr/include/libusb-1.0 
+          -run ./src/stlink-lib/chipid.c
 
 
 
