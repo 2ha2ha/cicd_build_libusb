@@ -29,7 +29,7 @@ jobs:
           EOF
 
           cat << EOF > src/stlink-lib/main.c
-          #include "chipid.c"
+          #include "./chipid.c"
           int32_t ugly_log(int32_t level, const char *tag, const char *format, ...){return 0;}
           void stlink_print_devicelist() {
             struct stlink_chipid_params *dev = NULL;
