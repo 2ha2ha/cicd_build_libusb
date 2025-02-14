@@ -89,6 +89,38 @@ jobs:
           {"STM32F301_F302_F318",NULL,0x439,2,0x1ffff7cc,0x800,0xa000,0x1fffd800,0x2000,0x1ffff800,0x10,2,0x0,0x0},
           {"STM32C071xx",NULL,0x493,1,0x1fff75a0,0x800,0x6000,0x1fff0000,0x1800,0x1fff7800,0x80,0,0x0,0x0},{NULL}
           };
+
+          void stlink_add_devicelist(struct stlink_chipid_params arr[]) {
+            int i = 0;
+            for(i=0; arr[i].dev_type != NULL; i++) {
+              struct stlink_chipid_params *ts;
+              ts = calloc(1, sizeof(struct stlink_chipid_params));
+              if (ts==NULL) {
+                  continue;
+              }
+              ts->dev_type       = arr[i].dev_type;
+              ts->ref_manual_id  = arr[i].ref_manual_id;
+              ts->chip_id        = arr[i].chip_id;
+              ts->flash_type     = arr[i].flash_type;
+              ts->flash_size_reg = arr[i].flash_size_reg;
+              ts->flash_pagesize = arr[i].flash_pagesize;
+              ts->sram_size      = arr[i].sram_size;
+              ts->bootrom_base   = arr[i].bootrom_base;
+              ts->bootrom_size   = arr[i].bootrom_size;
+              ts->option_base    = arr[i].option_base;
+              ts->option_size    = arr[i].option_size;
+              ts->flags          = arr[i].flags;
+              ts->otp_base       = arr[i].otp_base;
+              ts->otp_size       = arr[i].otp_size;
+              ts->next           = devicelist;
+              devicelist = ts;
+            }
+          }
+
+          void stlink_auto_devicelist() {
+              stlink_add_devicelist(devicelist_const);
+          }
+
           "@ | Add-Content chipid.c
 
       - name: 创建 build 目录
