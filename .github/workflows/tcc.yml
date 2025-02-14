@@ -11,14 +11,16 @@ jobs:
       - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
 
-      - name: 安装 tcc
-        # sudo apt-get update -qq  # 静默更新源列表
-        run: sudo apt-get install -y tcc
+      - name: 安装 tcc libusb
+        run: |
+          sudo apt-get update -qq  # 静默更新源列表
+          sudo apt-get install -y tcc libusb-1.0-0-dev
 
       - name: 创建头文件
         working-directory: stlink
         run: |
-          cat << EOF > inc/version.h
+
+          cat << EOF >> inc/version.h
           #ifndef VERSION_H
           #define VERSION_H
           #define STLINK_VERSION "xxxxxx"
@@ -26,10 +28,6 @@ jobs:
           #define STLINK_VERSION_MINOR 8
           #define STLINK_VERSION_PATCH 0
           #endif // VERSION_H
-          EOF
-
-          cat << EOF > inc/libusb.h
-          #define LIBUSB_API_VERSION 0xFFFFFFFF
           EOF
 
           cat << EOF > src/stlink-lib/main.c
@@ -68,9 +66,13 @@ jobs:
 
       - name: tcc
         working-directory: stlink
-        run: tcc -Iinc -Isrc/stlink-lib -run ./src/stlink-lib/main.c
+        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/main.c >> a.txt
 
 
-
+      - name: 上传 stlink
+        uses: actions/upload-artifact@v4
+        with:
+          name: aaaa
+          path: stlink/a.txt
 
 
