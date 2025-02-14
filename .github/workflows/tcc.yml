@@ -12,13 +12,12 @@ jobs:
         run: git clone https://github.com/stlink-org/stlink.git
 
       - name: 安装 tcc
-        run: |
-          # sudo apt-get update -qq  # 静默更新源列表
-          sudo apt-get install tcc
+        # sudo apt-get update -qq  # 静默更新源列表
+        run: sudo apt-get install tcc
 
       - name: tcc
         working-directory: stlink
-        run: tcc -Iinc -run ./src/stlink-lib/chipid.c
+        run: tcc -Iinc -Isrc/stlink-lib -run ./src/stlink-lib/chipid.c
 
 
 
