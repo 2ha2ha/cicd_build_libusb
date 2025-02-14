@@ -13,7 +13,7 @@ jobs:
 
       - name: 安装 tcc
         # sudo apt-get update -qq  # 静默更新源列表
-        run: sudo apt-get install -y tcc libusb-1.0-0-dev
+        run: sudo apt-get install -y tcc
 
       - name: 创建头文件
         working-directory: stlink
@@ -34,7 +34,7 @@ jobs:
           int32_t ugly_log(int32_t level, const char *tag, const char *format, ...){return 0;}
           void stlink_print_devicelist() {
             struct stlink_chipid_params *dev = NULL;
-            printf("struct stlink_chipid_params devicelist_const[] ={{\"unknow\"},");
+            printf("\n\nstruct stlink_chipid_params devicelist_const[] ={{\"unknow\"},");
             for (dev = devicelist; dev != NULL; dev = dev->next) {
               printf("\n{");
               printf("\"%s\",",dev->dev_type);
