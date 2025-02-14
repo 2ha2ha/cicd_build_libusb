@@ -48,4 +48,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: stlink
-          path: stlink/build/dist
+          path: |
+            stlink/build/dist
+            stlink/src/stlink-lib/chipid.c
+            
