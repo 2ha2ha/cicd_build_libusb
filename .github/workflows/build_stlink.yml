@@ -29,11 +29,16 @@ jobs:
         if: matrix.config.change == true
         working-directory: stlink/src/stlink-lib
         run: |
-          Add-Content chipid.c @"
-            void set_devicelist(struct stlink_chipid_params *set) {devicelist = set;}
-            struct stlink_chipid_params *get_devicelist(struct stlink_chipid_params *set) {return devicelist;}
-          "@
+          Add-Content chipid.c '`r`n#include"devicelist_func.c"`r`n#include"devicelist_const.c"'
           type chipid.c
+
+      - name: 复制 devicelist 文件
+        if: matrix.config.change == true
+        working-directory: stlink
+        run: |
+          Copy-Item -Path "../devicelist_func.c"  -Destination "./src/stlink-lib/devicelist_func.c"  -Force
+          Copy-Item -Path "../devicelist_const.c" -Destination "./src/stlink-lib/devicelist_const.c" -Force
+
 
       - name: 创建 build 目录
         working-directory: stlink

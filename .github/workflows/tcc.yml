@@ -1,0 +1,20 @@
+name: 静态编译 stlink
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: 克隆项目 stlink
+        run: git clone https://github.com/stlink-org/stlink.git
+
+      - name: tcc
+        working-directory: stlink/src/stlink-lib
+        run: tcc
+
+
+
+
+
