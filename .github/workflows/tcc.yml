@@ -56,7 +56,7 @@ jobs:
             printf("{NULL}\n};");
           }
           int main() {
-            init_chipids("./stlink/config/chips");
+            init_chipids("config/chips");
             stlink_print_devicelist();
             return 0;
           }
