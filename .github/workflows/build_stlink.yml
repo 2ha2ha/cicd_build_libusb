@@ -1,12 +1,11 @@
 name: 打包上传 stlink
 
 on:
-  push:
   workflow_dispatch: 
 
 jobs:
   job_windows_msvc:
-    name: 打包上传 stlink
+    name: 相对路径 "./chips"
     runs-on: windows-latest
     steps:
       - name: 克隆项目 stlink
@@ -16,7 +15,7 @@ jobs:
         working-directory: stlink
         shell: pwsh
         run: |
-          # 替换 "CMAKE_CHIPS_DIR" > ""./chips"
+          # 替换 "CMAKE_CHIPS_DIR" > "./chips"
           (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
           type CMakeLists.txt
 
