@@ -25,22 +25,21 @@ jobs:
           #define STLINK_VERSION_MAJOR 1
           #define STLINK_VERSION_MINOR 8
           #define STLINK_VERSION_PATCH 0
-          int ugly_log(int level, const char *tag, const char *format, ...){return 0;}
           #endif // VERSION_H
           EOF
 
           cat << EOF > src/stlink-lib/main.c
-          main(){
+          #include "chipid.c"
+          int ugly_log(int level, const char *tag, const char *format, ...){return 0;}
+          int main(void){
             return 0;
           }
           EOF
 
 
-
-
       - name: tcc
         working-directory: stlink
-        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/chipid.c ./src/stlink-lib/main.c
+        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/main.c
 
 
 
