@@ -55,7 +55,7 @@ jobs:
       - name: 移动 chips 目录
         if: matrix.config.relative_path == true
         working-directory: stlink/build/dist
-        run:
+        run: |
           Move-Item -Path "Program Files (x86)\stlink\config\chips" -Destination "bin\chips" -Force
           Remove-Item -Path "Program Files (x86)" -Recurse -Force
 
