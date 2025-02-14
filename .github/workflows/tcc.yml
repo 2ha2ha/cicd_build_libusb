@@ -12,12 +12,12 @@ jobs:
 
       - name: 安装 tcc
         run: |
-          sudo apt-get update -qq  # 静默更新源列表
+          # sudo apt-get update -qq  # 静默更新源列表
           sudo apt-get install tcc
 
       - name: tcc
-        working-directory: stlink/src/stlink-lib
-        run: tcc -run chipid.c
+        working-directory: stlink
+        run: tcc -Iinc -run /src/stlink-lib/chipid.c
 
 
 
