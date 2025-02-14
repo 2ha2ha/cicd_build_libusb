@@ -14,12 +14,7 @@ jobs:
         working-directory: stlink/src/stlink-lib
         run: |
           if (Test-Path chipid.c) {
-              Add-Content chipid.c @"
-              `r`n
-              void set_devicelist(struct stlink_chipid_params *set) {
-                  devicelist = set;
-              }
-              "@
+              Add-Content chipid.c "`r`nvoid set_devicelist(struct stlink_chipid_params *set) {devicelist = set;}"
               Write-Host "已成功注入代码到 chipid.c"
           } else {
               Write-Host "chipid.c不存在, 跳过代码注入"
@@ -51,4 +46,3 @@ jobs:
           path: |
             stlink/build/dist
             stlink/src/stlink-lib/chipid.c
-            
