@@ -25,6 +25,7 @@ jobs:
           #define STLINK_VERSION_MAJOR 1
           #define STLINK_VERSION_MINOR 8
           #define STLINK_VERSION_PATCH 0
+          int ugly_log(int level, const char *tag, const char *format, ...){return 0;}
           #endif // VERSION_H
           EOF
 
