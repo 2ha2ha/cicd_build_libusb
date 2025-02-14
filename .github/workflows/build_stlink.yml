@@ -4,16 +4,22 @@ on:
   workflow_dispatch: 
 
 jobs:
-  job_windows_msvc:
-    name: 相对路径 "./chips"
+  build:
     runs-on: windows-latest
+    strategy:
+    matrix:
+      config:
+        - name: stlink-package
+          relative_path: false
+        - name: stlink-package-relative
+          relative_path: true
     steps:
       - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
 
       - name: 修改 CMakeLists.txt
+        if: matrix.config.relative_path == true
         working-directory: stlink
-        shell: pwsh
         run: |
           # 替换 "CMAKE_CHIPS_DIR" > "./chips"
           (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
@@ -28,28 +34,33 @@ jobs:
         run: >
           cmake ..
           -G "Visual Studio 17 2022" -A Win32
-          # -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
-          # 多线程静态
-          # -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
+          -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
+          -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
 
       - name: 打包项目
         working-directory: stlink/build
         run: cmake --build . --config Release --target PACKAGE
 
       - name: 调整目录结构
-        shell: pwsh
         working-directory: stlink/build/dist
         run: |
-          tree
-          Expand-Archive -Path "stlink-*.zip" -DestinationPath .
-          Get-ChildItem -Directory "stlink-*" | Rename-Item -NewName "stlink-new" -Force
-          cd stlink-new
+          $ZipFile = Get-ChildItem "stlink-*.zip" | Select-Object -First 1
+          Expand-Archive -Path $ZipFile.Name -DestinationPath .
+          if (Test-Path $ZipFile.BaseName) {
+              Get-ChildItem -Path $ZipFile.BaseName | Move-Item -Destination . -Force
+              Remove-Item $ZipFile.BaseName -Recurse -Force
+          }
+          Remove-Item $ZipFile.Name -Recurse -Force
+
+      - name: 移动 chips 目录
+        if: matrix.config.relative_path == true
+        working-directory: stlink/build/dist
+        run:
           Move-Item -Path "Program Files (x86)\stlink\config\chips" -Destination "bin\chips" -Force
           Remove-Item -Path "Program Files (x86)" -Recurse -Force
-          tree
 
       - name: 上传 stlink
         uses: actions/upload-artifact@v4
         with:
-          name: stlink-package
-          path: stlink/build/dist/stlink-new
+          name: ${{ matrix.config.name }}
+          path: stlink/build/dist
