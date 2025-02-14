@@ -7,12 +7,12 @@ jobs:
   build:
     runs-on: windows-latest
     strategy:
-    matrix:
-      config:
-        - name: stlink-package
-          relative_path: false
-        - name: stlink-package-relative
-          relative_path: true
+      matrix:
+        config:
+          - name: stlink-package
+            relative_path: false
+          - name: stlink-package-relative
+            relative_path: true
     steps:
       - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
