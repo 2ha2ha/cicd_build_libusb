@@ -16,9 +16,17 @@ jobs:
         run: sudo apt-get install -y tcc libusb-1.0-0-dev
 
       - name: 创建头文件
-        working-directory: stlink
+        working-directory: stlink/inc
         run: |
-          "" > inc/version.h
+          cat << EOF > version.h
+          #ifndef VERSION_H
+          #define VERSION_H
+          #define STLINK_VERSION "xxxxxx"
+          #define STLINK_VERSION_MAJOR 1
+          #define STLINK_VERSION_MINOR 8
+          #define STLINK_VERSION_PATCH 0
+          #endif // VERSION_H
+          EOF
 
       - name: tcc
         working-directory: stlink
