@@ -66,8 +66,7 @@ jobs:
 
       - name: tcc
         working-directory: stlink
-        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/main.c >> a.txt
-
+          run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/main.c | tee a.txt
 
       - name: 上传 stlink
         uses: actions/upload-artifact@v4
