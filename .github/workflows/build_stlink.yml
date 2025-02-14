@@ -29,8 +29,7 @@ jobs:
         if: matrix.config.change == true
         working-directory: stlink/src/stlink-lib
         run: |
-          Add-Content chipid.c 
-          @"
+          Add-Content chipid.c @"
             void set_devicelist(struct stlink_chipid_params *set) {devicelist = set;}
             struct stlink_chipid_params *get_devicelist(struct stlink_chipid_params *set) {return devicelist;}
           "@
