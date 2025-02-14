@@ -9,21 +9,32 @@ jobs:
     strategy:
       matrix:
         config:
-          - name: stlink-package
-            relative_path: false
-          - name: stlink-package-relative
-            relative_path: true
+          - name: stlink原版
+            change: false
+          - name: stlink修改版
+            change: true
     steps:
       - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
 
       - name: 修改 CMakeLists.txt
-        if: matrix.config.relative_path == true
+        if: matrix.config.change == true
         working-directory: stlink
         run: |
           # 替换 "CMAKE_CHIPS_DIR" > "./chips"
           (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
           type CMakeLists.txt
+
+      - name: 代码注入 chipid.c
+        if: matrix.config.change == true
+        working-directory: stlink/src/stlink-lib
+        run: |
+          Add-Content chipid.c 
+          @"
+            void set_devicelist(struct stlink_chipid_params *set) {devicelist = set;}
+            struct stlink_chipid_params *get_devicelist(struct stlink_chipid_params *set) {return devicelist;}
+          "@
+          type chipid.c
 
       - name: 创建 build 目录
         working-directory: stlink
@@ -45,6 +56,7 @@ jobs:
           tree
 
       - name: 调整目录结构
+        if: matrix.config.change == true
         working-directory: stlink/build/dist
         run: |
           $ZipFile = Get-ChildItem "stlink-*.zip" | Select-Object -First 1
@@ -56,7 +68,7 @@ jobs:
           Remove-Item $ZipFile.Name -Recurse -Force
 
       - name: 移动 chips 目录
-        if: matrix.config.relative_path == true
+        if: matrix.config.change == true
         working-directory: stlink/build/dist
         run: |
           Move-Item -Path "Program Files (x86)\stlink\config\chips" -Destination "bin\chips" -Force
