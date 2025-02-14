@@ -16,9 +16,9 @@ jobs:
         run: sudo apt-get install -y tcc libusb-1.0-0-dev
 
       - name: 创建头文件
-        working-directory: stlink/inc
+        working-directory: stlink
         run: |
-          cat << EOF > version.h
+          cat << EOF > inc/version.h
           #ifndef VERSION_H
           #define VERSION_H
           #define STLINK_VERSION "xxxxxx"
@@ -29,9 +29,18 @@ jobs:
           #endif // VERSION_H
           EOF
 
+          cat << EOF > /src/stlink-lib/main.c
+          main(){
+            return 0;
+          }
+          EOF
+
+
+
+
       - name: tcc
         working-directory: stlink
-        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/chipid.c
+        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/chipid.c ./src/stlink-lib/main.c
 
 
 
