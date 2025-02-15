@@ -13,9 +13,6 @@ jobs:
       - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
 
-      - name: Install tcc and libusb
-        run: choco install -y tcc libusb
-
       - name: tcc
         working-directory: stlink
         run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/main.c | tee a.txt
