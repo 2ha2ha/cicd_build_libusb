@@ -180,6 +180,23 @@ ST_CLOSE:
     return ret;
 }
 
+#define ERRMSG_COUNT (sizeof(qErrMsg)/sizeof(qErrMsg[0]))
+#define ERRMSG_UNKNOWN "未知错误码: %d"
+char *qErrMsg[] = {
+    "成功",                // RET_OK
+    "无法连接 STLINK",      // RET_OPEN_ERR
+    "无法进入 DBUG 模式",   // RET_DBG_ERR
+    "无法获取 STLINK 状态", // RET_STATUS_ERR
+    "读取错误",             // RET_READ_ERR
+    "文件未找到",           // RET_FILE_NOT_FOUND
+    "HEX 文件格式有问题",   // RET_IHEX_ERR
+    "无法写入 flash",       // RET_MWRITE_FLASH
+    "无法写入 flash",       // RET_FWRITE_FLASH
+    "无法写入 sram",        // RET_MWRITE_SRAM
+    "无法写入 sram",        // RET_FWRITE_SRAM
+    "地址异常"              // RET_ADDR_OUT_RANGE
+};
+
 // 根据错误码获取错误信息
 const char *qGetErrMsg(RET errCode) {
     static char unknown[1024] = {0} ;
