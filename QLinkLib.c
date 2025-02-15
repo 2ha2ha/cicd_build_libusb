@@ -15,14 +15,12 @@ static void qInitChips(const char* scanDir) {
     if (!isInit && scanDir!=NULL) {
         isInit = 1;
         init_chipids(scanDir);
-        return;
     }
     #ifdef AUTO_LOAD_CHIPS
     static int isLoad = 0;
     if (!isLoad) {
         isLoad = 1;
         qAutoLoadChips();
-        return;
     }
     #endif
 }
