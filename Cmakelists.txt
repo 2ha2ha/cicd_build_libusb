@@ -8,22 +8,25 @@ project(QLink VERSION 1.0.0 LANGUAGES C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+# 定义 stlink-static 变量
+set(STLINK_LIB_PATH "stlink_lib")
+
 # 添加动态链接库目标
 add_library(QLink SHARED 
     QLinkLib.c
-    chipid_hard.c
+    QLinkChips.c
 )
 
 # 指定头文件路径
 target_include_directories(QLink PUBLIC
-    stlink-static/include
-    stlink-static/include/libusb-1.0
+    ${STLINK_LIB_PATH}/include
+    ${STLINK_LIB_PATH}/include/libusb-1.0
 )
 
 # 链接 stlink-static.lib 库
 target_link_libraries(QLink PRIVATE 
-    ${CMAKE_SOURCE_DIR}/stlink-static/lib/stlink-static.lib
-    ${CMAKE_SOURCE_DIR}/stlink-static/lib/libusb-1.0.lib
+    ${CMAKE_SOURCE_DIR}/${STLINK_LIB_PATH}/lib/stlink.lib
+    ${CMAKE_SOURCE_DIR}/${STLINK_LIB_PATH}/lib/libusb-1.0.lib
 )
 
 # 设置输出目录（可选）

@@ -9,19 +9,29 @@
 #include <read_write.h>
 #include <usb.h>
 
+
+
 // 加载设备列表
-static void qinit() {
-    static int init = 0;
-    if (init) {
+static void qInitChips(const char* scanDir) {
+    static int isInit = 0;
+    if (!isInit && scanDir==NULL) {
+        isInit = 1;
+        init_chipids(scanDir);
         return;
     }
-    init = 1;
-    init_chipids("./chips");
+    #ifdef AUTO_LOAD_CHIPS
+    static int isLoad = 0;
+    if (!isLoad) {
+        isLoad = 1;
+        qAutoLoadChips();
+        return;
+    }
+    #endif
 }
 
 // 获取设备信息
-RET qinfo(QINFO* info) {
-    qinit();
+RET qInfo(QINFO* info) {
+    qInitChips(NULL);
     RET ret = RET_OK;
     info->id = 0;
     info->sflash = 0;
@@ -55,8 +65,8 @@ ST_CLOSE:
 }
 
 // 读取数据: 要读取的地址, 要读取的长度, 读取到的数据
-RET qread(uint32_t addr, uint32_t len, uint8_t *data) {
-    qinit();
+RET qRead(uint32_t addr, uint32_t len, uint8_t *data) {
+    qInitChips(NULL);
     RET ret = RET_OK;
     stlink_t* sl = stlink_open_usb(0, 1, NULL, 0);
     if (sl == NULL) {
@@ -90,11 +100,9 @@ ST_CLOSE:
     return ret;
 }
 
-// 检查文件是否存在
-static BOOL qFileExists(const char* lpFileName) {
-    DWORD dwAttrib = GetFileAttributesA(lpFileName);
-    return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
-        !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+// 检查文件或文件夹是否存在
+static BOOL qPathExists(const char* lpPath) {
+    return (GetFileAttributesA(lpPath) != INVALID_FILE_ATTRIBUTES);
 }
 
 // 检查文件名是否以 ".hex" 结尾
@@ -110,10 +118,10 @@ static BOOL qIsHex(const char* path) {
 }
 
 // 烧录文件: 文件路径, 烧录地址
-RET qwrite(const char *path, uint32_t addr) {
-    qinit();
+RET qWrite(const char *path, uint32_t addr) {
+    qInitChips(NULL);
     RET ret = RET_OK;
-    if (!qFileExists(path)) {
+    if (!qPathExists(path)) {
         return RET_FILE_NOT_FOUND;
     }
     BOOL isHex = qIsHex(path);
@@ -172,4 +180,14 @@ ST_CLOSE:
     stlink_close(sl);
     free(mem);
     return ret;
+}
+
+// 根据错误码获取错误信息
+const char *qErrMsg(RET errCode) {
+    static char unknown[1024] = {0} ;
+    if(errCode < 0 || errCode >= ERRMSG_COUNT) {
+        sprintf(unknown, ERRMSG_UNKNOWN, errCode);
+        return unknown;
+    }
+    return errMsg[errCode];
 }

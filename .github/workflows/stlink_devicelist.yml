@@ -1,0 +1,68 @@
+name: stlink 导出 devicelist
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: 克隆项目 stlink
+        run: git clone https://github.com/stlink-org/stlink.git
+
+      - name: 代码注入 chipid.c
+        working-directory: stlink/src/stlink-lib
+        run: |
+          @"
+          struct stlink_chipid_params **qGetDevicelist(){return &devicelist;}
+          "@ | Add-Content chipid.c
+          type chipid.c
+
+      - name: 修改 "./chips" 相对路径
+        working-directory: stlink
+        run: |
+          (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
+          type CMakeLists.txt
+
+      - name: 创建 build 目录
+        working-directory: stlink
+        run: mkdir ./build
+
+      - name: 编译项目
+        working-directory: stlink/build
+        run: >
+          cmake ..
+          -G "Visual Studio 17 2022" -A Win32
+          -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
+          -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
+
+      - name: 打包项目
+        working-directory: stlink/build
+        run: |
+          cmake --build . --config Release --target PACKAGE
+          tree
+
+      - name: 调整目录结构
+        working-directory: stlink/build/dist
+        run: |
+          $ZipFile = Get-ChildItem "stlink-*.zip" | Select-Object -First 1
+          Expand-Archive -Path $ZipFile.Name -DestinationPath .
+          if (Test-Path $ZipFile.BaseName) {
+              Get-ChildItem -Path $ZipFile.BaseName | Move-Item -Destination . -Force
+              Remove-Item $ZipFile.BaseName -Recurse -Force
+          }
+          Remove-Item $ZipFile.Name -Recurse -Force
+
+      - name: 移动 chips 目录
+        working-directory: stlink/build/dist
+        run: |
+          Move-Item -Path "Program Files (x86)\stlink\config\chips" -Destination "bin\chips" -Force
+          Remove-Item -Path "Program Files (x86)" -Recurse -Force
+
+      - name: 上传 stlink
+        uses: actions/upload-artifact@v4
+        with:
+          name: stlink_devicelist
+          path: |
+            stlink/build/dist
+

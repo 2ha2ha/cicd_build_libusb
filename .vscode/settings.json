@@ -1,5 +1,11 @@
 {
     "files.associations": {
-        "strsafe.h": "c"
-    }
+        "strsafe.h": "c",
+        "read_write.h": "c",
+        "usb.h": "c",
+        "stdint.h": "c",
+        "common_flash.h": "c",
+        "stlink.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

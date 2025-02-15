@@ -15,7 +15,7 @@ jobs:
       - name: environment preparation
         run: mkdir .\build
 
-      - name: project configuration in release
+      - name: cmake configure
         working-directory: build
         run: >
           cmake ..
@@ -23,12 +23,9 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
           -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
 
-      - name: project PACKAGE
+      - name: Build Project
         working-directory: build
         run: cmake --build . --config Release
-
-      - name: List directory structure
-        run: tree /F build
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
