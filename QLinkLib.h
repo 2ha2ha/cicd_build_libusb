@@ -5,11 +5,6 @@
 
 #define AUTO_LOAD_CHIPS
 
-#ifdef AUTO_LOAD_CHIPS
-void qAutoLoadChips();
-void qDumpChips(const char* filePath);
-#endif
-
 #ifdef _WINDLL
 #define QLINKLIBAPI __declspec(dllexport)
 #else
@@ -50,10 +45,13 @@ QLINKLIBAPI RET qRead(uint32_t addr, uint32_t len, uint8_t *data);
 // 添加指定目录下的芯片配置文件, 可以不设置, 有内置默认值
 QLINKLIBAPI void qInitChips(const char* scanDir);
 
-// 导出 devicelist 到文件
-QLINKLIBAPI void qDumpChips(const char* filePath);
-
 // 根据错误码获取错误信息
 QLINKLIBAPI const char *qGetErrMsg(RET errCode);
+
+#ifdef AUTO_LOAD_CHIPS
+void qAutoLoadChips();
+// 导出 devicelist 到文件
+QLINKLIBAPI void qDumpChips(const char* filePath);
+#endif
 
 #endif
