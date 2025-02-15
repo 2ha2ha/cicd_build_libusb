@@ -13,7 +13,7 @@
 
 // 添加到 chipid.c 的代码
 // struct stlink_chipid_params **qGetDevicelist(){return &devicelist;}
-struct stlink_chipid_params *qGetDevicelist();
+struct stlink_chipid_params **qGetDevicelist();
 
 #include "chips.txt"
 
