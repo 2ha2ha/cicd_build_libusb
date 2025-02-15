@@ -1,27 +1,20 @@
-
-
-name:  tcc for windows
+name: Compile Hello World
 
 on:
   push:
-  workflow_dispatch: 
 
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
-      - name: 克隆项目 stlink
-        run: git clone https://github.com/stlink-org/stlink.git
 
-      - name: tcc
-        working-directory: stlink
-        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/main.c | tee a.txt
-
-      - name: 上传 stlink
-        uses: actions/upload-artifact@v4
-        with:
-          name: aaaa
-          path: stlink/a.txt
-
-
-
+    - name: Compile Hello World
+      run: |
+        echo #include <iostream> > hello.cpp
+        echo using namespace std; >> hello.cpp
+        echo int main() { >> hello.cpp
+        echo     cout << "Hello World!" << endl; >> hello.cpp
+        echo     return 0; >> hello.cpp
+        echo } >> hello.cpp
+        cl.exe /nologo hello.cpp /Fe:hello.exe
