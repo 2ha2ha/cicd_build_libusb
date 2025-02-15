@@ -1,0 +1,29 @@
+name: Windows Commit Demo
+
+on:
+  push:
+    branches:
+      - main  # 触发工作流的分支
+
+jobs:
+  commit-demo:
+    runs-on: windows-latest  # 使用 Windows 环境
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  # 克隆仓库
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Modify a file
+        run: |
+          echo "This is a new line added by GitHub Actions." >> README.md
+
+      - name: Commit changes
+        run: |
+          git add README.md
+          git commit -m "Automated commit by GitHub Actions"
+          git push

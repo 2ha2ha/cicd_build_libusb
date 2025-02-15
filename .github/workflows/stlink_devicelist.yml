@@ -59,6 +59,8 @@ jobs:
           Move-Item -Path "Program Files (x86)\stlink\config\chips" -Destination "bin\chips" -Force
           Remove-Item -Path "Program Files (x86)" -Recurse -Force
 
+      
+
       - name: 上传 stlink
         uses: actions/upload-artifact@v4
         with:
