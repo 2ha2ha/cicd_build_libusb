@@ -11,10 +11,11 @@ jobs:
 
     - name: Compile Hello World
       run: |
-        echo #include <iostream> > hello.cpp
-        echo using namespace std; >> hello.cpp
-        echo int main() { >> hello.cpp
-        echo     cout << "Hello World!" << endl; >> hello.cpp
-        echo     return 0; >> hello.cpp
-        echo } >> hello.cpp
-        cl.exe /nologo hello.cpp /Fe:hello.exe
+        @"
+        #include <stdio.h>
+        int main() {
+            printf("Hello, World!\n");
+            return 0;
+        }
+        "@ | Add-Content hello.c
+        cl.exe /nologo hello.c /Fe:hello.exe
