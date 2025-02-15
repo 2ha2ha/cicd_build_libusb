@@ -3,6 +3,7 @@
 name:  tcc for windows
 
 on:
+  push:
   workflow_dispatch: 
 
 jobs:
