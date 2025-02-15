@@ -88,6 +88,11 @@ jobs:
           git commit -m "$commitMessage"
         continue-on-error: true
 
+      - name: Push 修改
+        if: steps.commit.outcome == 'success'
+        run: |
+          git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+
       - name: 上传 stlink
         uses: actions/upload-artifact@v4
         with:
