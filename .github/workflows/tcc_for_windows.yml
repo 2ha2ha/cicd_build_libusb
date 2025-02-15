@@ -9,6 +9,9 @@ jobs:
 
     steps:
 
+    - name: Set up default MSVC
+      uses: actions/setup-microsoft-vc@v1
+
     - name: Compile Hello World
       run: |
         @"
