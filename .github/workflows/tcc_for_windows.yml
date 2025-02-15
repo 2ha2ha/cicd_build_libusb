@@ -9,6 +9,11 @@ jobs:
 
     steps:
 
+  - name: Set up Visual Studio shell
+    uses: egor-tensin/vs-shell@v2
+    with:
+      arch: x86
+
     - name: Compile Hello World
       run: |
         @"
@@ -18,4 +23,4 @@ jobs:
             return 0;
         }
         "@ | Add-Content hello.c
-        cl /nologo hello.c /Fe:hello.exe
+        cl.exe /nologo hello.c /Fe:hello.exe
