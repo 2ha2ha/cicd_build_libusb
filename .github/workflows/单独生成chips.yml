@@ -1,4 +1,4 @@
-name: 单独生成chips
+name: 单独生成 chips.txt
 
 on:
   workflow_dispatch: 

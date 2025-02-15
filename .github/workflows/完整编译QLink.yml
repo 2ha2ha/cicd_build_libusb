@@ -28,7 +28,7 @@ jobs:
         working-directory: stlink/src/stlink-lib
         run: |
           @"
-          // struct stlink_chipid_params **qGetDevicelist(){return &devicelist;}
+          struct stlink_chipid_params **qGetDevicelist(){return &devicelist;}
           "@ | Add-Content chipid.c
           type chipid.c
 

@@ -1,4 +1,4 @@
-name: 编译qlink
+name: 编译 QLink
 
 on:
   workflow_dispatch: 
