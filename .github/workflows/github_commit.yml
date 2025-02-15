@@ -11,31 +11,34 @@ jobs:
       contents: write  # 必须开启写权限
 
     steps:
-    - name: Checkout code
+    - name: Checkout 代码
       uses: actions/checkout@v4
       with:
         fetch-depth: 0  # 获取完整提交历史
 
-    - name: Setup Git config
+    - name: 配置用户名邮箱
       run: |
         git config --global user.name "${{ github.actor }}"
         git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
-    - name: Generate demo file
-      run: |
-        $date = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-        $content = "Auto-generated content at $date"
-        Set-Content -Path .\readme.txt -Value $content
 
-    - name: Commit changes
+
+
+
+
+
+
+
+
+    - name: Commit 修改
       id: commit
       run: |
         git add .
-        $commitMessage = "Auto commit [skip ci]"
+        $commitMessage = "auto-commit-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
         git commit -m "$commitMessage"
-      continue-on-error: true  # 允许无修改时失败
+      continue-on-error: true
 
-    - name: Push changes
+    - name: Push 修改
       if: steps.commit.outcome == 'success'
       run: |
         git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main

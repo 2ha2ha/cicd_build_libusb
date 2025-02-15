@@ -6,7 +6,22 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+
+    permissions:
+      contents: write  # 必须开启写权限
+
     steps:
+
+      - name: Checkout 本仓库代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整提交历史
+
+      - name: 配置用户名邮箱
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
       - name: 克隆项目 stlink
         run: git clone https://github.com/stlink-org/stlink.git
 
@@ -58,8 +73,20 @@ jobs:
         run: |
           Move-Item -Path "Program Files (x86)\stlink\config\chips" -Destination "bin\chips" -Force
           Remove-Item -Path "Program Files (x86)" -Recurse -Force
-
       
+      - name: 清空 stlink_lib 文件夹
+        run: Remove-Item -Path stlink_lib -Recurse -Force
+
+      - name: 把 stlink/build/dist 文件夹下内容全部复制到 stlink_lib 文件夹
+        run: Copy-Item -Path stlink/build/dist -Destination stlink_lib -Recurse -Force
+
+      - name: Commit 修改
+        id: commit
+        run: |
+          git add stlink_lib/*
+          $commitMessage = "auto-commit-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+          git commit -m "$commitMessage"
+        continue-on-error: true
 
       - name: 上传 stlink
         uses: actions/upload-artifact@v4
