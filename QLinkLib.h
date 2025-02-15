@@ -25,7 +25,7 @@ typedef enum RET {
     RET_ADDR_OUT_RANGE,    // 地址超出范围
 } RET;
 
-#define ERRMSG_COUNT (sizeof(errMsg)/sizeof(errMsg[0]))
+#define ERRMSG_COUNT (sizeof(qErrMsg)/sizeof(qErrMsg[0]))
 #define ERRMSG_UNKNOWN "未知错误码: %d"
 char *qErrMsg[] = {
     "成功",                // RET_OK
