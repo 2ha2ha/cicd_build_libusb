@@ -38,21 +38,11 @@ jobs:
           (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
           type CMakeLists.txt
 
-      # 设置缓存
-      - name: Cache build artifacts
-        uses: actions/cache@v3
-        id: cache
-        with:
-          path: stlink/build/
-          key: ${{ runner.os }}-build-${{ hashFiles('stlink/src/stlink-lib/chipid.*', 'stlink/CMakeLists.txt') }}
-
       - name: 创建 build 目录
-        if: steps.cache.outputs.cache-hit != 'true'
         working-directory: stlink
         run: mkdir ./build
 
       - name: 编译项目
-        if: steps.cache.outputs.cache-hit != 'true'
         working-directory: stlink/build
         run: >
           cmake ..
@@ -61,14 +51,12 @@ jobs:
           -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
 
       - name: 打包项目
-        if: steps.cache.outputs.cache-hit != 'true'
         working-directory: stlink/build
         run: |
           cmake --build . --config Release --target PACKAGE
           tree
 
       - name: 调整目录结构
-        if: steps.cache.outputs.cache-hit != 'true'
         working-directory: stlink/build/dist
         run: |
           $ZipFile = Get-ChildItem "stlink-*.zip" | Select-Object -First 1
@@ -80,14 +68,12 @@ jobs:
           Remove-Item $ZipFile.Name -Recurse -Force
 
       - name: 移动 chips 目录
-        if: steps.cache.outputs.cache-hit != 'true'
         working-directory: stlink/build/dist
         run: |
           Move-Item -Path "Program Files (x86)\stlink\config\chips" -Destination "bin\chips" -Force
           Remove-Item -Path "Program Files (x86)" -Recurse -Force
       
       - name: 更新 stlink_lib 文件夹
-        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           Remove-Item -Path stlink_lib -Recurse -Force
           Copy-Item -Path stlink/build/dist -Destination stlink_lib -Recurse -Force
