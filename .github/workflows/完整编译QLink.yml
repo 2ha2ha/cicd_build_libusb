@@ -93,10 +93,15 @@ jobs:
         working-directory: build
         run: cmake --build . --config Release
 
+      - name: 复制 QLink.dll 到主文件夹
+        run: |
+          Copy-Item -Path build/dll/Release/QLink.dll -Destination . -Recurse -Force
+
       - name: Commit 修改
         id: commit
         run: |
           git add stlink_lib/*
+          git add QLink.dll
           $commitMessage = "auto-commit-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
           git commit -m "$commitMessage"
         continue-on-error: true
@@ -109,10 +114,10 @@ jobs:
       - name: 上传 stlink
         uses: actions/upload-artifact@v4
         with:
-          name: stlink_lib
+          name: qlink_lib
           path: |
             stlink/build/dist
-            build/dll
+            build/dll/Release/QLink.dll
             stlink/src/stlink-lib/chipid.c
             stlink/CMakeLists.txt
 

@@ -1,29 +1,55 @@
 #include <windows.h>
+#include <stdio.h>
 
 // 声明DLL中的函数
-typedef void (*FunctionType)();
+typedef void (*FUNC)(const char*);
 
-int main() {
-    HMODULE hModule = LoadLibrary("./stlink_lib/bin/stlink.dll"); // 加载DLL
+// 初始化芯片列表
+// void qInitChips(const char* scanDir);
+// 导出 devicelist 到文件
+// void qDumpChips(const char* filePath);
+
+int main(int argc, char* argv[]) {
+    HMODULE hModule = LoadLibrary("QLink.dll"); // 加载DLL
     if (hModule == NULL) {
         // 如果加载失败，输出错误信息并退出
-        fprintf(stderr, "Error loading a.dll\n");
+        puts("Error loading QLink.dll\n");
+        getchar();
         return 1;
     }
 
     // 获取函数的地址
-    FunctionType bFunc = (FunctionType)GetProcAddress(hModule, "b");
-    if (bFunc == NULL) {
+    FUNC qInitChips = (FUNC)GetProcAddress(hModule, "qInitChips");
+    FUNC qDumpChips = (FUNC)GetProcAddress(hModule, "qDumpChips");
+
+    if (qInitChips == NULL || qDumpChips == NULL) {
         // 如果获取失败，输出错误信息并退出
-        fprintf(stderr, "Error getting address of function b\n");
+        puts("Error getting  function \n");
         FreeLibrary(hModule); // 释放加载的DLL
         return 1;
     }
 
-    // 调用函数
-    bFunc();
+    #define DEF_FILE    "./chips.txt"
+    #define DEF_DIR     "./stlink_lib/bin/chips"
 
-    // 释放加载的DLL
-    FreeLibrary(hModule);
+    char *dirPath = NULL;
+    char *filePath = NULL;
+    switch(argc) {
+        case 1:
+            qInitChips(DEF_DIR);
+            qDumpChips(DEF_FILE);
+            break;
+        case 2:
+            qInitChips(DEF_DIR);
+            qDumpChips(argv[1]);
+            break;
+        case 3:
+            qInitChips(argv[2]);
+            qDumpChips(argv[1]);
+            break;
+    }
+    puts("====Done====\n");  
+    FreeLibrary(hModule); // 释放加载的DLL
+    getchar();
     return 0;
 }

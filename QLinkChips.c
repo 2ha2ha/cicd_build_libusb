@@ -15,7 +15,7 @@
 // struct stlink_chipid_params *qGetDevicelist(){return devicelist;}
 struct stlink_chipid_params *qGetDevicelist();
 
-#include "devicelist.txt"
+#include "chips.txt"
 
 void qDumpChips(const char* filePath) {
     FILE *file = fopen(filePath, "w+");
