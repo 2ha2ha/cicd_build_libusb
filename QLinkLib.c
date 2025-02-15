@@ -12,7 +12,7 @@
 // 加载设备列表
 static void qInitChips(const char* scanDir) {
     static int isInit = 0;
-    if (!isInit && scanDir==NULL) {
+    if (!isInit && scanDir!=NULL) {
         isInit = 1;
         init_chipids(scanDir);
         return;
