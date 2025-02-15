@@ -62,7 +62,7 @@ jobs:
       - name: 上传 stlink
         uses: actions/upload-artifact@v4
         with:
-          name: stlink_devicelist
+          name: stlink_lib
           path: |
             stlink/build/dist
 
