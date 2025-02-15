@@ -12,8 +12,8 @@
 #include <usb.h>
 
 // 添加到 chipid.c 的代码
-// struct stlink_chipid_params **qGetDevicelist(){return &devicelist;}
-struct stlink_chipid_params **qGetDevicelist();
+// struct stlink_chipid_params *qGetDevicelist(){return devicelist;}
+struct stlink_chipid_params *qGetDevicelist();
 
 struct stlink_chipid_params devicelist_const[] ={{"unknow"},
 {"STM32F303_F328_F334"   , NULL, 0x438, 2 , 0x1ffff7cc, 0x800  , 0x3000  , 0x1fffd800, 0x2000 , 0x1ffff800, 0x10  , 2 , 0x0       , 0x0}  , 
@@ -97,7 +97,7 @@ void qDumpChips(const char* filePath) {
     if (file == NULL) {
         return;
     }
-    struct stlink_chipid_params *devicelist = *qGetDevicelist();
+    struct stlink_chipid_params *devicelist = qGetDevicelist();
     fprintf(file, "struct stlink_chipid_params devicelist_const[] ={{\"unknow\"},");
     for (struct stlink_chipid_params *dev = devicelist; dev != NULL; dev = dev->next) {
         fprintf(file, "\n{\"%s\",", dev->dev_type);
@@ -121,7 +121,7 @@ void qDumpChips(const char* filePath) {
 
 static void stlink_add_devicelist(struct stlink_chipid_params arr[]) {
   int i = 0;
-  struct stlink_chipid_params *devicelist = *qGetDevicelist();
+  struct stlink_chipid_params *devicelist = qGetDevicelist();
   for(i=0; arr[i].dev_type != NULL; i++) {
     struct stlink_chipid_params *ts;
     ts = calloc(1, sizeof(struct stlink_chipid_params));
