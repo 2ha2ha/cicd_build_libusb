@@ -1,7 +1,6 @@
 name: build_qlink
 
 on:
-  push:
   workflow_dispatch: 
 
 jobs:
