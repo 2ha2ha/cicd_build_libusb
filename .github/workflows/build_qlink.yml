@@ -5,7 +5,7 @@ on:
 
 jobs:
   job_windows_msvc:
-    name: windows MSVC
+    name: 创建 qlink.dll
     runs-on: windows-latest
     steps:
 
