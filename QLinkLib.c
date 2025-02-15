@@ -143,12 +143,12 @@ RET qWrite(const char *path, uint32_t addr) {
     }
     if ((addr >= sl->flash_base) && (addr < sl->flash_base + sl->flash_size)) {
         if (isHex) {
-            if (stlink_mwrite_flash(sl, mem, size, addr, NO_ERASE)) {
+            if (stlink_mwrite_flash(sl, mem, size, addr, SECTION_ERASE)) {
                 ret = RET_MWRITE_FLASH;
             }
         }
         else {
-            if (stlink_fwrite_flash(sl, path, addr, NO_ERASE)) {
+            if (stlink_fwrite_flash(sl, path, addr, SECTION_ERASE)) {
                 ret = RET_FWRITE_FLASH;
             }
         }
@@ -197,7 +197,7 @@ char *qErrMsg[] = {
 
 // 根据错误码获取错误信息
 const char *qGetErrMsg(RET errCode) {
-    static char unknown[1024] = {0} ;
+    static char unknown[128] = {0} ;
     if(errCode < 0 || errCode >= ERRMSG_COUNT) {
         sprintf(unknown, ERRMSG_UNKNOWN, errCode);
         return unknown;
