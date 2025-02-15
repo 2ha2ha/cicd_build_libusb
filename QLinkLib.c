@@ -32,7 +32,7 @@ RET qInfo(QINFO* info) {
     info->id = 0;
     info->sflash = 0;
     info->ssram = 0;
-    info->type = "unknow";
+    info->type = "unknown";
     stlink_t* sl = stlink_open_usb(0, 1, NULL, 0);
     if (sl == NULL) {
         return RET_OPEN_ERR;
