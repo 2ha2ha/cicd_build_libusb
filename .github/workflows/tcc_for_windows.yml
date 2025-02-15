@@ -9,9 +9,6 @@ jobs:
 
     steps:
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.1
-
     - name: Compile Hello World
       run: |
         @"
@@ -21,4 +18,4 @@ jobs:
             return 0;
         }
         "@ | Add-Content hello.c
-        cl.exe /nologo hello.c /Fe:hello.exe
+        cl /nologo hello.c /Fe:hello.exe
