@@ -27,7 +27,7 @@ typedef enum RET {
 
 #define ERRMSG_COUNT (sizeof(errMsg)/sizeof(errMsg[0]))
 #define ERRMSG_UNKNOWN "未知错误码: %d"
-char *errMsg[] = {
+char *qErrMsg[] = {
     "成功",                // RET_OK
     "无法连接 STLINK",      // RET_OPEN_ERR
     "无法进入 DBUG 模式",   // RET_DBG_ERR
@@ -65,6 +65,6 @@ void qInitChips(const char* scanDir);
 void qDumpChips(const char* filePath);
 
 // 根据错误码获取错误信息
-const char *qErrMsg(RET errCode);
+const char *qGetErrMsg(RET errCode);
 
 #endif

@@ -9,8 +9,6 @@
 #include <read_write.h>
 #include <usb.h>
 
-
-
 // 加载设备列表
 static void qInitChips(const char* scanDir) {
     static int isInit = 0;
@@ -183,11 +181,11 @@ ST_CLOSE:
 }
 
 // 根据错误码获取错误信息
-const char *qErrMsg(RET errCode) {
+const char *qGetErrMsg(RET errCode) {
     static char unknown[1024] = {0} ;
     if(errCode < 0 || errCode >= ERRMSG_COUNT) {
         sprintf(unknown, ERRMSG_UNKNOWN, errCode);
         return unknown;
     }
-    return errMsg[errCode];
+    return qErrMsg[errCode];
 }
