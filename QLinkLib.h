@@ -10,6 +10,12 @@ void qAutoLoadChips();
 void qDumpChips(const char* filePath);
 #endif
 
+#ifdef _WINDLL
+#define QLINKLIBAPI __declspec(dllexport)
+#else
+#define QLINKLIBAPI 
+#endif
+
 typedef enum RET {
     RET_OK = 0,            // 成功
     RET_OPEN_ERR,          // 打开错误
@@ -33,21 +39,21 @@ typedef struct {
 } QINFO;
 
 // 获取设备信息
-RET qInfo(QINFO* info);
+QLINKLIBAPI RET qInfo(QINFO* info);
 
 // 烧录文件: 文件路径, 烧录地址
-RET qWrite(const char* filePath, uint32_t addr);
+QLINKLIBAPI RET qWrite(const char* filePath, uint32_t addr);
 
 // 读取数据: 要读取的地址, 要读取的长度, 读取到的数据
-RET qRead(uint32_t addr, uint32_t len, uint8_t *data);
+QLINKLIBAPI RET qRead(uint32_t addr, uint32_t len, uint8_t *data);
 
 // 添加指定目录下的芯片配置文件, 可以不设置, 有内置默认值
-void qInitChips(const char* scanDir);
+QLINKLIBAPI void qInitChips(const char* scanDir);
 
 // 导出 devicelist 到文件
-void qDumpChips(const char* filePath);
+QLINKLIBAPI void qDumpChips(const char* filePath);
 
 // 根据错误码获取错误信息
-const char *qGetErrMsg(RET errCode);
+QLINKLIBAPI const char *qGetErrMsg(RET errCode);
 
 #endif
