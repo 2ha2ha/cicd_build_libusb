@@ -12,7 +12,7 @@
 #include <usb.h>
 
 // 添加到 chipid.c 的代码
-// struct stlink_chipid_params *qGetDevicelist(){return devicelist;}
+// struct stlink_chipid_params **qGetDevicelist(){return &devicelist;}
 struct stlink_chipid_params *qGetDevicelist();
 
 #include "chips.txt"
@@ -22,10 +22,9 @@ void qDumpChips(const char* filePath) {
     if (file == NULL) {
         return;
     }
-    struct stlink_chipid_params *devicelist = qGetDevicelist();
-    fprintf(file, "#define DEVICELIST_CONST");
+    fprintf(file, "#define DEVICELIST_CONST \n");
     fprintf(file, "struct stlink_chipid_params devicelist_const[] ={{\"unknow\"},");
-    for (struct stlink_chipid_params *dev = devicelist; dev != NULL; dev = dev->next) {
+    for (struct stlink_chipid_params *dev = *qGetDevicelist(); dev != NULL; dev = dev->next) {
         fprintf(file, "\n{\"%s\",", dev->dev_type);
         fprintf(file, "\"%s\",", dev->ref_manual_id);
         fprintf(file, "0x%x,", dev->chip_id);
@@ -45,9 +44,8 @@ void qDumpChips(const char* filePath) {
     fclose(file);
 }
 
-static void stlink_add_devicelist(struct stlink_chipid_params arr[]) {
+static void qAddChips(struct stlink_chipid_params arr[]) {
   int i = 0;
-  struct stlink_chipid_params *devicelist = qGetDevicelist();
   for(i=0; arr[i].dev_type != NULL; i++) {
     struct stlink_chipid_params *ts;
     ts = calloc(1, sizeof(struct stlink_chipid_params));
@@ -66,8 +64,8 @@ static void stlink_add_devicelist(struct stlink_chipid_params arr[]) {
     ts->flags          = arr[i].flags;
     ts->otp_base       = arr[i].otp_base;
     ts->otp_size       = arr[i].otp_size;
-    ts->next           = devicelist;
-    devicelist = ts;
+    ts->next           = *qGetDevicelist();
+    *qGetDevicelist()  = ts;
   }
 }
 
@@ -78,7 +76,7 @@ void qAutoLoadChips() {
     }
     isInit = 1;
     #ifdef DEVICELIST_CONST
-    stlink_add_devicelist(devicelist_const);
+    qAddChips(devicelist_const);
     #endif
 }
 
