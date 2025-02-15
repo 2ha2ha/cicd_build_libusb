@@ -5,7 +5,8 @@
         "usb.h": "c",
         "stdint.h": "c",
         "common_flash.h": "c",
-        "stlink.h": "c"
+        "stlink.h": "c",
+        "*.txt": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

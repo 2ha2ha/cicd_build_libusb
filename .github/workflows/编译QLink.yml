@@ -1,11 +1,11 @@
-name: build_qlink
+name: 编译qlink
 
 on:
   workflow_dispatch: 
 
 jobs:
   job_windows_msvc:
-    name: 创建 qlink.dll
+    name: 创建 QLink.dll
     runs-on: windows-latest
     steps:
 
@@ -30,6 +30,6 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: qlink
+          name: QLink
           path: |
             build\dll

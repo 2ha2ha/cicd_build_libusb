@@ -1,4 +1,4 @@
-name: stlink 导出 devicelist
+name: 完整编译 QLink
 
 on:
   workflow_dispatch: 
@@ -78,10 +78,10 @@ jobs:
           Remove-Item -Path stlink_lib -Recurse -Force
           Copy-Item -Path stlink/build/dist -Destination stlink_lib -Recurse -Force
 
-      - name: 创建编译 qlink 的目录
+      - name: 创建编译 QLink 的目录
         run: mkdir .\build
 
-      - name: cmake qlink
+      - name: cmake QLink
         working-directory: build
         run: >
           cmake ..
@@ -89,7 +89,7 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS="/NODEFAULTLIB:MSVCRT"
           -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
 
-      - name: build qlink
+      - name: build QLink
         working-directory: build
         run: cmake --build . --config Release
 

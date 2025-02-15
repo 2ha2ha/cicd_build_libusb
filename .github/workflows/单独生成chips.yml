@@ -1,4 +1,4 @@
-name: tcc查看devicdlist
+name: 单独生成chips
 
 on:
   workflow_dispatch: 
@@ -18,7 +18,7 @@ jobs:
       - name: 创建头文件
         working-directory: stlink
         run: |
-
+        
           cat << EOF > inc/version.h
           #ifndef VERSION_H
           #define VERSION_H
@@ -65,12 +65,12 @@ jobs:
 
       - name: tcc
         working-directory: stlink
-        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/main.c | tee devicdlist.txt
+        run: tcc -Iinc -Isrc/stlink-lib -I/usr/include/libusb-1.0 -run ./src/stlink-lib/main.c | tee chips.txt
 
       - name: 上传 stlink
         uses: actions/upload-artifact@v4
         with:
-          name: devicdlist
-          path: stlink/devicdlist.txt
+          name: chips
+          path: stlink/chips.txt
 
 

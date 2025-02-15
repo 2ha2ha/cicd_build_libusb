@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-#define AUTO_LOAD_CHIPS
-
 #ifdef _WINDLL
 #define QLINKLIBAPI __declspec(dllexport)
 #else
@@ -48,7 +46,9 @@ QLINKLIBAPI void qInitChips(const char* scanDir);
 // 根据错误码获取错误信息
 QLINKLIBAPI const char *qGetErrMsg(RET errCode);
 
+#define AUTO_LOAD_CHIPS
 #ifdef AUTO_LOAD_CHIPS
+// 自动加载芯片参数
 void qAutoLoadChips();
 // 导出 devicelist 到文件
 QLINKLIBAPI void qDumpChips(const char* filePath);
