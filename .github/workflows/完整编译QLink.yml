@@ -38,20 +38,9 @@ jobs:
           (Get-Content CMakeLists.txt) -replace '-DSTLINK_CHIPS_DIR="\$\{CMAKE_CHIPS_DIR\}"', '-DSTLINK_CHIPS_DIR="./chips"' | Set-Content CMakeLists.txt
           type CMakeLists.txt
 
-      # 设置缓存
-      - name: Cache build artifacts
-        uses: actions/cache@v3
-        id: cache
-        with:
-          path: stlink/build/
-          key: ${{ runner.os }}-build-${{ hashFiles('**/chipid.c', '**/CMakeLists.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-  
-      # 如果缓存未命中，创建构建目录
       - name: 创建 build 目录
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: mkdir ./stlink/build
+        working-directory: stlink
+        run: mkdir ./build
 
       - name: 编译项目
         working-directory: stlink/build
