@@ -87,6 +87,7 @@ jobs:
           Remove-Item -Path "Program Files (x86)" -Recurse -Force
       
       - name: 更新 stlink_lib 文件夹
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           Remove-Item -Path stlink_lib -Recurse -Force
           Copy-Item -Path stlink/build/dist -Destination stlink_lib -Recurse -Force
