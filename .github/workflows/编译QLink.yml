@@ -27,9 +27,31 @@ jobs:
         working-directory: build
         run: cmake --build . --config Release
 
+      - name: 复制 QLink.dll 到主文件夹
+        run: |
+          Copy-Item -Path build/dll/Release/QLink.dll -Destination . -Recurse -Force
+
+      - name: 配置用户名邮箱
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Commit 修改
+        id: commit
+        run: |
+          git add QLink.dll
+          $commitMessage = "只编译 QLink $(Get-Date -Format 'yyyyMMdd-HHmmss')"
+          git commit -m "$commitMessage"
+        continue-on-error: true
+
+      - name: Push 修改
+        if: steps.commit.outcome == 'success'
+        run: |
+          git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: QLink
           path: |
-            build\dll
+            build/dll/Release/QLink.dll
